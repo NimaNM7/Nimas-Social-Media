@@ -54,8 +54,14 @@ def find_reply_with_id(id: str) :
 def find_all_users_ids() -> list :
     ids = []
     for index, row in users_db.iterrows() :
-        if row["ID"] in ids :
+        if row["ID"] in ids or row["STATUS"] == 2 :
             continue
+        ids.append(row["ID"])
+    return ids
+
+def find_all_users() -> list :
+    ids = []
+    for index, row in users_db.iterrows() :   
         ids.append(row["ID"])
     return ids
 
@@ -136,8 +142,12 @@ def text_post_handler(message) :
     for user in all_users :
         try :
             bot.send_message(user, final_message)
-        except :
-            print(f"problem with sending to {user}")
+        except Exception as e :
+            print(f"problem with sending to {user} {e}")
+            if "block" in str(e) :
+                blocking_user = find_user_with_id(user)
+                users_db.at[blocking_user[0], "STATUS"] = 2
+                users_db.to_csv(USERS_FILE_NAME, index= False)
     bot.reply_to(message, "پست با موفقیت فرستاده شد.")
 
 def media_is_comment(message) :
