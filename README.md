@@ -1,0 +1,1 @@
+A telegram bot where people can send posts (text, photo, video, voice and audio formats) and all other users can receive it after admin submits them. also people can reply on posts and start an unknown conversation. these are our bot's first features and we will have other features in future based on our experience and users ideas
